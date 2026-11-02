@@ -67,8 +67,8 @@ test_outcomes = training.test(test_dataloader, model, test_loss, device)
 
 # TODOs:
 # 1. update utils.plot_predictions()
-# 2. implement pytorch Dataset class instead of using numpy in construct_data
-# 3. train on scc for 10000 epochs
-# 4. consult Indrajit on noise added to simulated data - line from PDE-READ paper
-# 5. organize directories and files: will need to modularize things to efficiently train multiple models with different loss functions, on different data
+# 2. implement pytorch Dataset classes instead of using numpy in construct_heat_data
+# 3. set training.training.train() to save model checkpoints every 1000 epochs
+# 4. train on scc for 10000 epochs
+# 5. consult Indrajit on noise added to simulated data - line from PDE-READ paper
 # 6. continue DeepMoD implementation
