@@ -4,9 +4,9 @@ from torch.utils.data import random_split
 import matplotlib.pyplot as plt
 
 import utils
-import training
-from examples.heat_equation import construct_data
-from models import nn  # TODO: rename this module so it doesn't get confused with torch.nn
+import training.training as training
+from problems.heat_equation import construct_heat_data
+from models import neuralNetwork  
 
 #############################
 # 0. Set problem parameters #
@@ -20,7 +20,7 @@ batch_size = 512
 # 1. Load data #
 ################
 
-training_data = construct_data.HeatNoForcingDataset(N=10000)
+training_data = construct_heat_data.HeatNoForcingDataset(N=10000)
 train_dataloader = DataLoader(training_data, batch_size=batch_size)
 data_stats = train_dataloader.dataset.compute_stats()
 
@@ -37,7 +37,7 @@ print(f"Mean and std of X: {torch.from_numpy(data_stats[0]), torch.from_numpy(da
 
 device = torch.accelerator.current_accelerator().type if torch.accelerator.is_available() else "cpu"
 print(f"Using {device} device")
-model = nn.NeuralNetwork(1, [50,50,50,50,50])
+model = neuralNetwork.NeuralNetwork(1, [50,50,50,50,50])
 
 ##################
 # 3. Train model #
@@ -52,7 +52,7 @@ training_outcomes = training.train(optimizer, model, loss, train_dataloader, dev
 #################
 
 test_loss = torch.nn.L1Loss()
-test_data = construct_data.HeatNoForcingDataset(N=1000)
+test_data = construct_heat_data.HeatNoForcingDataset(N=1000)
 test_dataloader = DataLoader(test_data, batch_size=batch_size)
 test_stats = test_dataloader.dataset.compute_stats()
 test_outcomes = training.test(test_dataloader, model, test_loss, device)
@@ -63,7 +63,7 @@ test_outcomes = training.test(test_dataloader, model, test_loss, device)
 
 #utils.plot_training_loss(training_outcomes[0]["epoch_losses"], Niter)
 #utils.plot_parameter_gradients(training_outcomes[0]["parameter_gradients"], Niter, "./images", "testNN")
-utils.plot_predictions(test_data.get_data(), test_data.get_y(), test_outcomes[0], '', 'testNN')
+#utils.plot_predictions(test_data.get_data(), test_data.get_y(), test_outcomes[0], '', 'testNN')
 
 # TODOs:
 # 1. update utils.plot_predictions()
